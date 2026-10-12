@@ -31,6 +31,11 @@ Preloader → Header (corners + full-screen menu) → Hero ("the flight": pinned
 - Gotcha when screenshotting through Claude in Chrome: the tab is often `visibilityState: hidden`, so rAF pauses and Framer reveals/preloader freeze mid-animation (headlines look blank or overlapped). Not a site bug. For review, inject a style forcing `span.overflow-hidden>span.inline-block{transform:none}` and hide `.z-[100]` (preloader) instead of removing nodes (removing them crashes React).
 - Not yet restyled beyond tokens: Preloader (still UC dot field + count), Products cards, Clients, FAQ rows, ContactDrawer. They inherit the palette and type but have no ERA-specific moves.
 
+## Repo and deploy
+- GitHub: `artistandmachine/oceos-packaging-v2` (public), branch `master`. Pushing to master deploys via `.github/workflows/deploy.yml` to GitHub Pages at https://artistandmachine.github.io/oceos-packaging-v2/ (a project site; `artistandmachine.github.io` itself is the studio-anm site, a separate repo).
+- Sub-path: the workflow sets `NEXT_PUBLIC_BASE_PATH` from actions/configure-pages; `next.config.js` uses it as `basePath`, and `lib/site.ts` prefixes every `/images|/videos|/brand` path in site.json. Always import copy from `@/lib/site`, never the JSON directly, or assets 404 on Pages. Local dev has no prefix.
+- Not in git (too big; kept locally): `imported/` (Firefly source clip, ocean PSB/PNGs) and `assets-src/`.
+
 ## Content
 - Copy in `data/site.json` comes from the live oceospackaging.com (scraped 2026-10-07): home, products, approach, impact, about, contact. Edits only where the copy rules forced them (em dashes, "only offer") or to fit a layout. The FAQ is new, written from facts on the live site (the site has none).
 - **Email only, no phone.** Bion confirmed: there is no OCEOS phone number. Footer leads with the giant email. The contact form still asks the visitor for theirs (the live form does too).
