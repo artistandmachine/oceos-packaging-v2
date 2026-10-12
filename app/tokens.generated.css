@@ -5,14 +5,14 @@
    ============================================================ */
 
 :root {
-  --brand-cream: #F3F3EC; /* page ground (ERA cream) */
+  --brand-cream: #F3F2ED; /* page ground (ERA cream) */
   --brand-cream-deep: #E6E5DA; /* cards, placeholders on cream */
   --brand-navy: #17233B; /* ink: all text on light grounds */
   --brand-slate: #5E6679; /* muted text on cream and mist */
-  --brand-mist: #DEE7ED; /* pale blue-grey band */
+  --brand-mist: #DEE8ED; /* pale blue-grey band */
   --brand-mist-deep: #C9D7E0; /* cards, placeholders on mist */
-  --brand-forest: #57642B; /* dark band, muted olive (Tengile hue, ~40% saturation) */
-  --brand-forest-deep: #495424; /* cards, placeholders on forest */
+  --brand-forest: #173A4C; /* dark band, muted olive (Tengile hue, ~40% saturation) */
+  --brand-forest-deep: #566330; /* cards, placeholders on forest */
   --brand-sage: #DBDECF; /* muted text on forest (4.7:1, AA) */
   --color-border: #17233b26; /* hairlines and dividers (navy at 15%) */
   --color-surface: var(--brand-cream); /* page / section background */
