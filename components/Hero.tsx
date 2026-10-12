@@ -151,12 +151,10 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
   // can't interpolate CSS variables).
   const titleY = useTransform(p, [0, 0.65], ["0%", "-4%"]);
   const titleColor = useTransform(p, [0.36, 0.47], ["#F3F3EC", "#17233B"]);
-  // The wordmark sits under the cloud decks and goes soft and fades as
-  // the first ones roll over it, gone before the title turns navy.
+  // The header's Book a call fades as the first clouds roll in
+  // (lib/heroChrome.ts); Menu then rises into its place once it's gone.
+  // The wordmark stays, turning navy with the title.
   const markFade = useTransform(p, [0.26, 0.42], [1, 0]);
-  const markBlur = useTransform(p, [0.26, 0.42], ["blur(0px)", "blur(6px)"]);
-  // The header's Book a call leaves with it (lib/heroChrome.ts).
-  // Menu then rises into its place, once it's fully gone.
   const menuLift = useTransform(p, [0.42, 0.5], [0, 1]);
   useMotionValueEvent(markFade, "change", (v) => heroChrome.set(v));
   useMotionValueEvent(menuLift, "change", (v) => heroMenuLift.set(v));
@@ -201,7 +199,6 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
         </motion.div>
         <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[var(--brand-cream)]" style={{ opacity: haze }} />
         <Scrim />
-        <Wordmark src={wordmark} opacity={markFade} filter={markBlur} />
 
         {/* Far to near. Each deck arrives huge and soft around you, then
             shrinks toward the centre, dropping away below as you climb
@@ -216,6 +213,7 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
         <motion.div className="pointer-events-none absolute inset-0" style={{ y: titleY }}>
           <Title {...copy} color={titleColor} />
         </motion.div>
+        <Wordmark src={wordmark} color={titleColor} />
       </div>
     </section>
   );
@@ -278,11 +276,12 @@ function Title({ eyebrow, titleTop, titleBottom, script, since, sub, logos, logo
   );
 }
 
-/** OCEOS PACKAGING, top centre on the nav mark's line (--mark-y), cream
- * over the footage. In the scene rather than the header so the clouds
- * can roll over it. A mask so it takes the text color. md+; phones have
- * no room between the header corners. */
-function Wordmark({ src, opacity, filter }: { src: string; opacity?: MotionValue<number>; filter?: MotionValue<string> }) {
+/** OCEOS PACKAGING, top centre on the nav mark's line (--mark-y). Like
+ * the title it never fades and sits above the clouds and veil, cream
+ * over the water and navy (`color`) by the end of the flight. A mask
+ * filled with the color. md+; phones have no room between the header
+ * corners. */
+function Wordmark({ src, color }: { src: string; color?: MotionValue<string> }) {
   const loaded = useLoaded();
   return (
     <motion.div
@@ -296,8 +295,7 @@ function Wordmark({ src, opacity, filter }: { src: string; opacity?: MotionValue
       <motion.span
         className="block h-full w-full bg-[var(--brand-cream)]"
         style={{
-          opacity,
-          filter,
+          backgroundColor: color,
           maskImage: `url("${src}")`,
           WebkitMaskImage: `url("${src}")`,
           maskSize: "contain",
