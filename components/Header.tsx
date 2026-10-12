@@ -36,6 +36,14 @@ export default function Header({ links, company }: { links: Link[]; company: Com
   const rightBand = useBandTheme(rightRef, rightRef);
   const theme = (band: string) => (open ? "dark" : band === "light" ? undefined : band);
 
+  // "To top" joins the corner under Menu once the footer is in view.
+  const [atFooter, setAtFooter] = useState(false);
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", () => {
+    const footer = document.querySelector("footer");
+    setAtFooter(!!footer && footer.getBoundingClientRect().top < window.innerHeight);
+  });
+
   // Only lock/unlock when `open` actually changes. Running on mount would
   // unlock the page while the Preloader still holds it.
   const prevOpen = useRef(open);
@@ -91,7 +99,7 @@ export default function Header({ links, company }: { links: Link[]; company: Com
           ref={rightRef}
           data-theme={theme(rightBand)}
           style={{ backgroundColor: "transparent" }}
-          className="pointer-events-auto absolute right-5 top-6 flex flex-col items-end gap-4 text-right text-on-surface transition-colors duration-500 md:right-10 md:top-10 lg:right-16"
+          className="pointer-events-auto absolute right-4 top-6 flex flex-col items-end gap-4 text-right text-on-surface transition-colors duration-500 md:right-6 md:top-10 lg:right-[2.25rem]"
         >
           <button type="button" onClick={openContact} className="group t-h4 relative flex flex-col items-end pb-1">
             <Roll>Book a call</Roll>
@@ -106,6 +114,17 @@ export default function Header({ links, company }: { links: Link[]; company: Com
           >
             <Roll>{open ? "Close" : "Menu"}</Roll>
           </button>
+          <a
+            href="#top"
+            onClick={(e) => scrollToHash(e, "#top")}
+            tabIndex={atFooter && !open ? undefined : -1}
+            aria-hidden={!atFooter || open}
+            className={`group t-label flex items-center gap-2 transition-opacity duration-500 ${
+              atFooter && !open ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+          >
+            <Roll>To top ↑</Roll>
+          </a>
         </div>
       </motion.header>
 

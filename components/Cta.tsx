@@ -24,7 +24,7 @@ export default function Cta({
   return (
     <section id="contact-cta" aria-label={eyebrow}>
       <ArchPanel eyebrow={eyebrow} heading={heading} image={image}>
-        <p className="t-body max-w-[36ch]">{body}</p>
+        <p className="t-h3 max-w-[44ch]">{body}</p>
         <div className="flex flex-wrap items-center justify-center gap-8">
           <Button href="#contact">{primary}</Button>
           <Button href={`mailto:${email}`} variant="outline">Email us</Button>

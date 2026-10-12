@@ -17,7 +17,7 @@ export default function Why({ eyebrow, heading, items }: { eyebrow: string; head
   const [active, setActive] = useState(0);
 
   return (
-    <section id="why" data-theme="mist" aria-label={eyebrow} className="gutter py-28 md:py-40">
+    <section id="why" data-theme="mist" aria-label={eyebrow} className="gutter py-28 md:py-40 lg:pt-mark">
       <div className="flex flex-col gap-8">
         <Eyebrow>{eyebrow}</Eyebrow>
         <RevealText text={heading} className="t-h1 max-w-[16ch]" />

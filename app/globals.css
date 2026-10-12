@@ -11,9 +11,23 @@
    ============================================================ */
 
 /* Shared so the nav mark can center itself on the t-h4 "Book a call"
-   (components/Header.tsx). */
+   (components/Header.tsx). --mark-y is that centre line on md+ (top-10
+   + half the t-h4). */
 :root {
   --size-h4: clamp(1.25rem, 1.75vw, 1.75rem);
+  --mark-y: calc(2.5rem + var(--size-h4) / 2);
+}
+
+/* Section eyebrows sit on the nav mark's centre line when the section
+   top reaches the top of the screen: --mark-y minus half a t-label line
+   (1.2 x 0.78125rem). lg only; below lg a solid header strip covers
+   that band. Right-hand blocks on this line take lg:mr-24 to clear
+   the header's Book a call. */
+@utility pt-mark {
+  padding-top: calc(var(--mark-y) - 0.47rem);
+}
+@utility top-mark {
+  top: calc(var(--mark-y) - 0.47rem);
 }
 
 html {
@@ -55,6 +69,25 @@ html.lenis body {
   [data-theme] {
     background-color: var(--color-surface);
     color: var(--color-on-surface);
+  }
+
+  /* Tailwind v4's preflight resets buttons to cursor: default. Everything
+     clickable gets the finger; utilities (cursor-grab) still override. */
+  a[href],
+  button,
+  [role="button"],
+  summary,
+  select,
+  label[for],
+  input[type="submit"],
+  input[type="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
   }
 }
 

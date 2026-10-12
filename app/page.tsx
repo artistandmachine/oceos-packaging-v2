@@ -23,7 +23,7 @@ import site from "@/lib/site";
  *   Reasons (mist): rising dome with curved heading -> three stacking cards
  *   Statement (cream): two-tone pinned headline + stat column
  *   Products (cream): drag rail with spec tables
- *   Process (forest): pinned route draw + moving marker + odometer
+ *   Process (forest): pinned closed-loop track + moving marker + CO2e stat
  *   Why (mist): list + crossfading image
  *   Clients (forest): testimonial + logo wall
  *   FAQ (cream)
@@ -39,7 +39,7 @@ export default function Home() {
       <Preloader products={preloader.products} stages={preloader.stages} />
       <Header links={nav} company={company} />
       <main>
-        <Hero {...hero} logos={clients.logos} logosLabel={clients.wallLabel} />
+        <Hero {...hero} wordmark={company.wordmark} logos={clients.logos} logosLabel={clients.wallLabel} />
         <Reasons {...reasons} />
         <Statement {...statement} />
         <Products {...products} />

@@ -8,8 +8,8 @@ import { RevealText } from "./Reveal";
 
 /**
  * ERA's closing "Sea views" panel: full screen, rises as an arch and
- * flattens to a rectangle as it scrolls in. Eyebrow on top, giant caps in
- * the middle, the caller's `children` at the bottom. Used by the Reasons
+ * flattens to a rectangle as it scrolls in. Eyebrow on top; the giant
+ * caps and the caller's `children` grouped in the middle below it. Used by the Reasons
  * intro and the closing CTA, so the motion stays identical.
  *
  * theme "dark" (CTA): a photo with a slow zoom-out under a scrim, cream text.
@@ -28,8 +28,8 @@ export default function ArchPanel({
   heading: string;
   image?: string;
   theme?: "dark" | "mist";
-  /** Group eyebrow, heading and children in the middle instead of
-   * spreading them top / middle / bottom across the screen. */
+  /** Group the eyebrow in the middle too, instead of leaving it at the
+   * top of the screen. */
   stacked?: boolean;
   children?: React.ReactNode;
 }) {
@@ -44,24 +44,30 @@ export default function ArchPanel({
       <motion.div
         data-theme={theme}
         style={reduce ? undefined : { borderRadius: radius }}
-        className={`gutter relative flex min-h-[100svh] flex-col items-center overflow-hidden py-16 text-center md:py-24 ${
+        className={`gutter relative flex min-h-[100svh] flex-col items-center overflow-hidden py-16 text-center md:py-24 ${stacked ? "" : "lg:pt-mark "}${
           stacked ? "justify-center gap-8 md:gap-12" : "justify-between"
         }`}
       >
         {image && (
-          <>
-            <motion.div className="absolute inset-0" style={reduce ? undefined : { scale }}>
-              <Media src={image} rounded={false} sizes="100vw" className="h-full w-full" />
-            </motion.div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-black/40" />
-          </>
+          <motion.div className="absolute inset-0" style={reduce ? undefined : { scale }}>
+            <Media src={image} rounded={false} sizes="100vw" className="h-full w-full" />
+          </motion.div>
         )}
 
         <div className="relative">
           <Eyebrow>{eyebrow}</Eyebrow>
         </div>
-        <RevealText text={heading} className="t-mega relative max-w-[12ch]" stagger={0.08} />
-        <div className="relative flex flex-col items-center gap-8">{children}</div>
+        {stacked ? (
+          <>
+            <RevealText text={heading} className="t-mega relative max-w-[12ch]" stagger={0.08} />
+            <div className="relative flex flex-col items-center gap-8">{children}</div>
+          </>
+        ) : (
+          <div className="relative flex flex-1 flex-col items-center justify-center gap-8 md:gap-10">
+            <RevealText text={heading} className="t-mega relative max-w-[12ch]" stagger={0.08} />
+            <div className="relative flex flex-col items-center gap-8 md:gap-10">{children}</div>
+          </div>
+        )}
       </motion.div>
     </div>
   );

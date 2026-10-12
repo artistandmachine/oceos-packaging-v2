@@ -45,6 +45,7 @@ export default function Hero({
   sub,
   video,
   clouds,
+  wordmark,
   logos = [],
   logosLabel = "Clients",
 }: {
@@ -57,6 +58,8 @@ export default function Hero({
   sub: string;
   video: Video;
   clouds: Cloud[];
+  /** OCEOS PACKAGING wordmark (company.wordmark), top centre on the mark line. */
+  wordmark: string;
   /** Client logos for the ticker under the paragraph (site.clients.logos). */
   logos?: Logo[];
   logosLabel?: string;
@@ -73,6 +76,7 @@ export default function Hero({
         <div data-band="dark" className="relative h-[calc(100svh+6rem)] overflow-hidden">
           <Ocean video={video} still />
           <Scrim />
+          <Wordmark src={wordmark} />
           <div className="absolute inset-x-0 top-0 h-[100svh]">
             <Title {...copy} />
           </div>
@@ -83,7 +87,7 @@ export default function Hero({
     );
   }
 
-  return <Ascent copy={copy} video={video} clouds={clouds} />;
+  return <Ascent copy={copy} video={video} clouds={clouds} wordmark={wordmark} />;
 }
 
 type Copy = {
@@ -98,7 +102,7 @@ type Copy = {
   logosLabel: string;
 };
 
-function Ascent({ copy, video, clouds }: { copy: Copy; video: Video; clouds: Cloud[] }) {
+function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; clouds: Cloud[]; wordmark: string }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   // The flight runs over the first 220vh of scroll; the last 50vh holds
@@ -123,6 +127,10 @@ function Ascent({ copy, video, clouds }: { copy: Copy; video: Video; clouds: Clo
   // can't interpolate CSS variables).
   const titleY = useTransform(p, [0, 0.65], ["0%", "-4%"]);
   const titleColor = useTransform(p, [0.36, 0.47], ["#F3F3EC", "#17233B"]);
+  // The wordmark sits under the cloud decks and goes soft and fades as
+  // the first ones roll over it, gone before the title turns navy.
+  const markFade = useTransform(p, [0.26, 0.42], [1, 0]);
+  const markBlur = useTransform(p, [0.26, 0.42], ["blur(0px)", "blur(6px)"]);
   // Cream closes over everything at the top of the climb
   const veil = useTransform(p, [0.68, 0.95], [0, 1]);
 
@@ -161,6 +169,7 @@ function Ascent({ copy, video, clouds }: { copy: Copy; video: Video; clouds: Clo
         </motion.div>
         <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[var(--brand-cream)]" style={{ opacity: haze }} />
         <Scrim />
+        <Wordmark src={wordmark} opacity={markFade} filter={markBlur} />
 
         {/* Far to near. Each deck arrives huge and soft, then shrinks away
             below as you climb past, while sliding up the frame with the
@@ -193,8 +202,9 @@ function Title({ eyebrow, titleTop, titleBottom, script, since, sub, logos, logo
     transition: { duration: 1, ease: EASE, delay },
   });
 
-  // Lines 1-4 (lead-in / REUSABLE / shopping bags / sign-off) start a
-  // quarter of the way down; "\n" in the copy breaks lines 1 and 4. A
+  // Lines 1-4 (lead-in / REUSABLE / shopping bags / sign-off) start
+  // 20% of the screen height from the top (160px on an 800px-tall
+  // screen); "\n" in the copy breaks lines 1 and 4. A
   // rule fills the space between line 4 and the paragraph; the paragraph
   // sits as far above the logo ticker as the ticker sits above the bottom. Lines 1->2 and
   // 3->4 share one gap (--hero-gap) so the lead-in and the sign-off sit
@@ -204,7 +214,7 @@ function Title({ eyebrow, titleTop, titleBottom, script, since, sub, logos, logo
     <motion.div
       data-theme="dark"
       style={{ backgroundColor: "transparent", color, ["--hero-gap" as string]: "clamp(1.5rem, 4.5svh, 3rem)" }}
-      className="gutter pointer-events-none absolute inset-0 flex flex-col items-center pb-10 pt-[25svh] text-center"
+      className="gutter pointer-events-none absolute inset-0 flex flex-col items-center pb-10 pt-[20svh] text-center"
     >
       <h1 className="flex flex-col items-center">
         <motion.span {...fade(0)} className="t-label mb-[var(--hero-gap)] block whitespace-pre-line">
@@ -232,6 +242,38 @@ function Title({ eyebrow, titleTop, titleBottom, script, since, sub, logos, logo
       <motion.div {...fade(0.8)} className="mt-10 w-[calc(100vw-2.5rem)] shrink-0 md:w-[calc(100vw-320px)]">
         <LogoTicker logos={logos} label={logosLabel} />
       </motion.div>
+    </motion.div>
+  );
+}
+
+/** OCEOS PACKAGING, top centre on the nav mark's line (--mark-y), cream
+ * over the footage. In the scene rather than the header so the clouds
+ * can roll over it. A mask so it takes the text color. md+; phones have
+ * no room between the header corners. */
+function Wordmark({ src, opacity, filter }: { src: string; opacity?: MotionValue<number>; filter?: MotionValue<string> }) {
+  const loaded = useLoaded();
+  return (
+    <motion.div
+      aria-hidden="true"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: loaded ? 1 : 0 }}
+      transition={{ duration: 1, delay: 0.5 }}
+      className="pointer-events-none absolute left-1/2 top-[var(--mark-y)] hidden h-[1.125rem] -translate-x-1/2 -translate-y-1/2 md:block lg:h-5"
+      style={{ aspectRatio: "324 / 24" }}
+    >
+      <motion.span
+        className="block h-full w-full bg-[var(--brand-cream)]"
+        style={{
+          opacity,
+          filter,
+          maskImage: `url("${src}")`,
+          WebkitMaskImage: `url("${src}")`,
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+        }}
+      />
     </motion.div>
   );
 }

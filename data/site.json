@@ -9,6 +9,7 @@
   "company": {
     "name": "OCEOS Packaging",
     "short": "OCEOS",
+    "wordmark": "/brand/logoOceosWordmark.svg",
     "url": "https://oceospackaging.com",
     "email": "hello@oceospackaging.com",
     "address": [
@@ -217,10 +218,11 @@
   "process": {
     "eyebrow": "Our approach",
     "heading": "Closed|loop,|again and again.",
-    "body": "Plastic collected, repurposed and put back into the economy. One bag lasts 3 to 5 years at about 50 trips a year, and saves 5.6 kg CO2e.",
-    "odometer": {
-      "max": 250,
-      "unit": "uses"
+    "body": "Plastic collected, repurposed and put back into the economy. One bag lasts 3 to 5 years at about 50 trips a year.",
+    "loopBack": "Back to 01",
+    "stat": {
+      "value": "5.6 kg",
+      "label": "CO2e saved per bag"
     },
     "steps": [
       {

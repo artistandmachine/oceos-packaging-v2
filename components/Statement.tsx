@@ -34,10 +34,10 @@ export default function Statement({
   const [muted, strong] = cut > 0 ? [heading.slice(0, cut), heading.slice(cut).replace(/^\|/, "")] : ["", heading];
 
   return (
-    <section id="about" aria-label={eyebrow} className="gutter py-28 md:py-40">
+    <section id="about" aria-label={eyebrow} className="gutter py-28 md:py-40 lg:pt-mark">
       <div className="grid gap-16 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-6">
-          <div className="flex flex-col gap-10 lg:sticky lg:top-28">
+          <div className="flex flex-col gap-10 lg:sticky lg:top-mark">
             <Eyebrow>{eyebrow}</Eyebrow>
             <Media src={images[0]} sizes="(min-width: 1024px) 20vw, 60vw" className="aspect-[16/10] w-3/5 lg:w-2/5" />
             <h2 className="t-h1">

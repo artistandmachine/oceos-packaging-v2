@@ -28,7 +28,7 @@ export default function Faq({
   const baseId = useId();
 
   return (
-    <section id="faq" aria-label={eyebrow} className="gutter py-28 md:py-40">
+    <section id="faq" aria-label={eyebrow} className="gutter py-28 md:py-40 lg:pt-mark">
       <div className="grid gap-14 lg:grid-cols-12">
         <div className="flex flex-col gap-8 lg:col-span-5">
           <Eyebrow>{eyebrow}</Eyebrow>

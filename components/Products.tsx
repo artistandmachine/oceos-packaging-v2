@@ -58,13 +58,13 @@ export default function Products({
   }
 
   return (
-    <section id="products" aria-label={eyebrow} className="overflow-hidden py-28 md:py-40">
-      <div className="gutter flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+    <section id="products" aria-label={eyebrow} className="overflow-hidden py-28 md:py-40 lg:pt-mark">
+      <div className="gutter flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-8">
           <Eyebrow>{eyebrow}</Eyebrow>
           <RevealText text={heading} className="t-h1 max-w-[12ch]" />
         </div>
-        <div className="flex max-w-sm flex-col gap-6">
+        <div className="flex max-w-sm flex-col gap-6 lg:mr-24">
           <p className="t-body text-on-surface-variant">{body}</p>
           <div className="flex items-center gap-3">
             <ArrowButton label="Previous" onClick={() => step(-1)} disabled={progress <= 0.001} flip />

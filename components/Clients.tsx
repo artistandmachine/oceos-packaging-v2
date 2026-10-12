@@ -37,13 +37,13 @@ export default function Clients({
   const go = (d: number) => setI((v) => (v + d + testimonials.length) % testimonials.length);
 
   return (
-    <section id="clients" data-theme="dark" aria-label={eyebrow} className="weave gutter py-28 md:py-40">
-      <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+    <section id="clients" data-theme="dark" aria-label={eyebrow} className="weave gutter py-28 md:py-40 lg:pt-mark">
+      <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-8">
           <Eyebrow>{eyebrow}</Eyebrow>
           <RevealText text={heading} className="t-h1 max-w-[14ch]" />
         </div>
-        <p className="t-body max-w-sm text-on-surface-variant">{body}</p>
+        <p className="t-body max-w-sm text-on-surface-variant lg:mr-24">{body}</p>
       </div>
 
       {/* Testimonial */}
