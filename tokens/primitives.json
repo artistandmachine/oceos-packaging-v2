@@ -1,0 +1,13 @@
+{
+  "brand": {
+    "cream": { "$value": "#F3F3EC", "$type": "color", "$description": "page ground (ERA cream)" },
+    "cream-deep": { "$value": "#E6E5DA", "$type": "color", "$description": "cards, placeholders on cream" },
+    "navy": { "$value": "#17233B", "$type": "color", "$description": "ink: all text on light grounds" },
+    "slate": { "$value": "#5E6679", "$type": "color", "$description": "muted text on cream and mist" },
+    "mist": { "$value": "#DEE7ED", "$type": "color", "$description": "pale blue-grey band" },
+    "mist-deep": { "$value": "#C9D7E0", "$type": "color", "$description": "cards, placeholders on mist" },
+    "forest": { "$value": "#57642B", "$type": "color", "$description": "dark band, muted olive (Tengile hue, ~40% saturation)" },
+    "forest-deep": { "$value": "#495424", "$type": "color", "$description": "cards, placeholders on forest" },
+    "sage": { "$value": "#DBDECF", "$type": "color", "$description": "muted text on forest (4.7:1, AA)" }
+  }
+}

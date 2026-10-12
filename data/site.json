@@ -1,0 +1,456 @@
+{
+  "_notes": [
+    "All copy lives here. Components only read from this file.",
+    "Copy is taken from the live oceospackaging.com (scraped 2026-10-07), lightly edited to fit the layout and the copy rules. Wording that had to change is noted in CLAUDE.md.",
+    "\"placeholder\": true renders an amber TBC badge in `npm run dev` only. Replace the value, then delete the flag.",
+    "A \"|\" inside a headline string inserts a UC-style wide gap between words (components/Gap.tsx).",
+    "Copy rules: confident, declarative, fragments welcome, no em dashes, no \"we offer\"."
+  ],
+  "company": {
+    "name": "OCEOS Packaging",
+    "short": "OCEOS",
+    "url": "https://oceospackaging.com",
+    "email": "hello@oceospackaging.com",
+    "address": [
+      "U.S. based",
+      "Serving global clients"
+    ],
+    "instagram": "#",
+    "linkedin": "#"
+  },
+  "preloader": {
+    "products": [
+      "rPET Non-Woven",
+      "Non-Woven PP",
+      "Ultrasonic rPET",
+      "Stitched Bags",
+      "Custom Print",
+      "Retail Programs"
+    ],
+    "stages": [
+      "Collection",
+      "Recycling",
+      "Fabric",
+      "Manufacturing",
+      "Distribution",
+      "Reuse",
+      "Return"
+    ]
+  },
+  "nav": [
+    {
+      "label": "Home",
+      "href": "#top"
+    },
+    {
+      "label": "Why OCEOS",
+      "href": "#reasons"
+    },
+    {
+      "label": "About",
+      "href": "#about"
+    },
+    {
+      "label": "Products",
+      "href": "#products"
+    },
+    {
+      "label": "Approach",
+      "href": "#process"
+    },
+    {
+      "label": "Clients",
+      "href": "#clients"
+    },
+    {
+      "label": "FAQ",
+      "href": "#faq"
+    }
+  ],
+  "hero": {
+    "eyebrow": "We manufacture",
+    "titleTop": "Reusable",
+    "script": "shopping bags",
+    "since": "An industry leader\nsince 2007",
+    "sub": "On a mission to reduce ocean-bound plastic through patented processes and responsible manufacturing.",
+    "video": {
+      "webm": "/videos/hero/ocean-firefly.webm",
+      "mp4": "/videos/hero/ocean-firefly.mp4",
+      "poster": "/images/hero/ocean-firefly-poster.webp"
+    },
+    "clouds": [
+      {
+        "src": "/images/hero/cloud-01.webp"
+      },
+      {
+        "src": "/images/hero/cloud-02.webp"
+      },
+      {
+        "src": "/images/hero/cloud-03.webp"
+      }
+    ]
+  },
+  "reasons": {
+    "eyebrow": "Why OCEOS",
+    "heading": "Three reasons to choose OCEOS",
+    "tagline": "One reusable bag replaces 150+ single-use bags",
+    "items": [
+      {
+        "title": "Better bags for a better world",
+        "body": "Since 2007, Oceos has been an innovator in wholesale manufacturing of customized, sustainable and reusable bags. Today every product we make has a positive impact on the earth and society.",
+        "image": "/images/reasons/01-better-bags.webp"
+      },
+      {
+        "title": "Made from recycled plastic",
+        "body": "Custom reusable shopping bags that serve a greater purpose than toting products. Brands put their name on these bags for their whole lifecycle, and become part of the effort to reduce plastic waste.",
+        "image": "/images/reasons/02-recycled.webp"
+      },
+      {
+        "title": "Stewardship and quality, hand in hand",
+        "body": "Raw materials like hemp, jute and plastic recovered from beaches and waterways. And a fair wage for the people who source those materials and make our products.",
+        "image": "/images/reasons/03-stewardship.webp"
+      }
+    ]
+  },
+  "statement": {
+    "eyebrow": "Who we are",
+    "heading": "From linear.|To circular.",
+    "body": [
+      "Our mission: eliminate single-use plastic with scalable, traceable and beautifully engineered reusable packaging for the world's leading brands.",
+      "Closed-loop manufacturing of reusable rPET non-woven bags, sourced from recycled plastic bottles and food packaging. Over 20 years of experience, patented technology and partnerships with major global retailers."
+    ],
+    "images": [
+      "/images/statement/01.webp",
+      "/images/statement/02.webp"
+    ],
+    "statsLabel": "Compounding 18 years of impact, 2007 to 2025",
+    "stats": [
+      {
+        "value": 1.2,
+        "suffix": "B+",
+        "label": "Bags produced"
+      },
+      {
+        "value": 45,
+        "suffix": "M+",
+        "label": "PET bottles recycled into rPET bags since 2021"
+      },
+      {
+        "value": 2832,
+        "suffix": " MT+",
+        "label": "CO2e saved vs. virgin PET production"
+      },
+      {
+        "value": 180,
+        "suffix": "B+",
+        "label": "Single-use bags replaced"
+      }
+    ]
+  },
+  "products": {
+    "eyebrow": "Products",
+    "heading": "Reusable|sustainable|packaging.",
+    "body": "Sturdy, lightweight, washable and reusable. Every bag fully customizable to meet your brand's sustainability goals.",
+    "items": [
+      {
+        "title": "rPET Non-Woven",
+        "description": "Made from recycled plastic bottles and certified rPET. Sturdy, lightweight, washable and reusable. Fully customizable to your brand.",
+        "specs": [
+          {
+            "k": "Material",
+            "v": "Certified rPET"
+          },
+          {
+            "k": "Source",
+            "v": "Recycled bottles"
+          }
+        ],
+        "image": "/images/products/rpet-non-woven.webp"
+      },
+      {
+        "title": "Non-Woven PP",
+        "description": "Synthetic fibers in virgin or recycled polypropylene, bonded with high-quality hand stitching and reinforced at the seams and handles.",
+        "specs": [
+          {
+            "k": "Material",
+            "v": "Virgin or recycled PP"
+          },
+          {
+            "k": "Build",
+            "v": "Reinforced seams and handles"
+          }
+        ],
+        "image": "/images/products/non-woven-pp.webp"
+      },
+      {
+        "title": "Ultrasonic rPET",
+        "description": "The world's first ultrasonic rPET non-woven bag. Oceos commissioned the first machine able to make it in 2021. Before that, no manufacturer anywhere could.",
+        "specs": [
+          {
+            "k": "Since",
+            "v": "2021, world first"
+          },
+          {
+            "k": "Produced",
+            "v": "30M+ bags"
+          }
+        ],
+        "image": "/images/products/ultrasonic-rpet.webp"
+      },
+      {
+        "title": "Stitched Bags",
+        "description": "Non-woven, woven, rPET, cotton and nylon constructions, stitched for daily use. Over a billion made.",
+        "specs": [
+          {
+            "k": "Materials",
+            "v": "Non-woven, woven, rPET, cotton, nylon"
+          },
+          {
+            "k": "Produced",
+            "v": "1B+ bags"
+          }
+        ],
+        "image": "/images/products/stitched.webp"
+      }
+    ]
+  },
+  "process": {
+    "eyebrow": "Our approach",
+    "heading": "Closed|loop,|again and again.",
+    "body": "Plastic collected, repurposed and put back into the economy. One bag lasts 3 to 5 years at about 50 trips a year, and saves 5.6 kg CO2e.",
+    "odometer": {
+      "max": 250,
+      "unit": "uses"
+    },
+    "steps": [
+      {
+        "title": "Collection",
+        "description": "Ocean-bound PET and post-consumer industrial plastics."
+      },
+      {
+        "title": "Recycling",
+        "description": "Sorted, cleaned and converted into rPET pellets."
+      },
+      {
+        "title": "Fabric",
+        "description": "Pellets made into durable, printable rPET non-woven fabric."
+      },
+      {
+        "title": "Manufacturing",
+        "description": "Reusable rPET bags designed and produced with patented technology."
+      },
+      {
+        "title": "Distribution",
+        "description": "Clients, including major retailers, roll bags out in sustainability programs."
+      },
+      {
+        "title": "Reuse and return",
+        "description": "Consumers reuse or return the bags. Some programs recollect and reprocess them."
+      }
+    ]
+  },
+  "why": {
+    "eyebrow": "How we operate",
+    "heading": "Accountability|every step|of the way.",
+    "items": [
+      {
+        "title": "Material sourcing",
+        "description": "Certified suppliers for recycled PET from bottles and ocean-bound waste streams.",
+        "image": "/images/why/01-sourcing.webp"
+      },
+      {
+        "title": "Traceable manufacturing",
+        "description": "Every step from pellet to finished bag is tracked. Full transparency for brands and ESG reporting.",
+        "image": "/images/why/02-traceable.webp"
+      },
+      {
+        "title": "Customization and branding",
+        "description": "A wide range of sizes, printing options and finishes to tell your sustainability story.",
+        "image": "/images/why/03-branding.webp"
+      },
+      {
+        "title": "Quality and compliance",
+        "description": "Facilities meet global manufacturing standards (GRS, ISO and more) and follow socially responsible practices.",
+        "image": "/images/why/04-quality.webp"
+      },
+      {
+        "title": "Delivery and support",
+        "description": "Retail-ready bags, ongoing logistics and sustainability performance data.",
+        "image": "/images/why/05-delivery.webp"
+      }
+    ]
+  },
+  "clients": {
+    "eyebrow": "Clients",
+    "heading": "Trusted|by the biggest names|around the globe.",
+    "body": "From grocery chains to luxury houses, retailers use Oceos bags to cut single-use plastic and prove it to their boards.",
+    "wallLabel": "Brand partnerships",
+    "logos": [
+      {
+        "name": "Target",
+        "logo": "/brand/clients/target.svg"
+      },
+      {
+        "name": "Walmart",
+        "logo": "/brand/clients/walmart.svg"
+      },
+      {
+        "name": "Whole Foods Market",
+        "logo": "/brand/clients/whole-foods-market.svg"
+      },
+      {
+        "name": "Aldi",
+        "logo": "/brand/clients/aldi.svg"
+      },
+      {
+        "name": "Lidl",
+        "logo": "/brand/clients/lidl.svg"
+      },
+      {
+        "name": "Tesco",
+        "logo": "/brand/clients/tesco.svg"
+      },
+      {
+        "name": "Sainsbury's",
+        "logo": "/brand/clients/sainsburys.svg"
+      },
+      {
+        "name": "Waitrose",
+        "logo": "/brand/clients/waitrose.svg"
+      },
+      {
+        "name": "M&S",
+        "logo": "/brand/clients/m-and-s.svg"
+      },
+      {
+        "name": "John Lewis",
+        "logo": "/brand/clients/john-lewis.svg"
+      },
+      {
+        "name": "Woolworths",
+        "logo": "/brand/clients/woolworths.svg"
+      },
+      {
+        "name": "Sprouts",
+        "logo": "/brand/clients/sprouts.svg"
+      },
+      {
+        "name": "Sam's Club",
+        "logo": "/brand/clients/sams-club.svg"
+      },
+      {
+        "name": "Lawson Station",
+        "logo": "/brand/clients/lawson-station.svg"
+      },
+      {
+        "name": "Family Mart",
+        "logo": "/brand/clients/family-mart.svg"
+      },
+      {
+        "name": "Chanel",
+        "logo": "/brand/clients/chanel.svg"
+      },
+      {
+        "name": "Dior",
+        "logo": "/brand/clients/dior.svg"
+      },
+      {
+        "name": "Gucci",
+        "logo": "/brand/clients/gucci.svg"
+      },
+      {
+        "name": "Valentino",
+        "logo": "/brand/clients/valentino.svg"
+      },
+      {
+        "name": "Balenciaga",
+        "logo": "/brand/clients/balenciaga.svg"
+      },
+      {
+        "name": "Lacoste",
+        "logo": "/brand/clients/lacoste.svg"
+      },
+      {
+        "name": "Kate Spade New York",
+        "logo": "/brand/clients/kate-spade-new-york.svg"
+      },
+      {
+        "name": "Max & Co.",
+        "logo": "/brand/clients/max-and-co.svg"
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Working with OCEOS helped us eliminate 2M single-use bags from our supply chain.",
+        "name": "Sustainability Lead",
+        "role": "",
+        "company": "Lidl"
+      },
+      {
+        "quote": "The traceability reports made it easy to share our progress with our ESG board.",
+        "name": "Head of Ops",
+        "role": "",
+        "company": "Target"
+      },
+      {
+        "quote": "OCEOS has been a key partner in helping us reach our sustainability goals.",
+        "name": "Sustainability Lead",
+        "role": "",
+        "company": "Whole Foods"
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "F.A.Q",
+    "heading": "Straight answers.",
+    "body": "So you can move forward with confidence.",
+    "items": [
+      {
+        "q": "What are your bags made from?",
+        "a": "Certified rPET from recycled plastic bottles and ocean-bound waste, virgin or recycled non-woven PP, and natural fibers like hemp and jute. Cotton and nylon on request."
+      },
+      {
+        "q": "How long does one bag last?",
+        "a": "3 to 5 years with normal use. At about 50 trips a year that's 150 to 250 uses, replacing 150+ single-use bags and saving 5.6 kg CO2e (medium bag, 150 uses)."
+      },
+      {
+        "q": "Which certifications do you hold?",
+        "a": "GRS (Global Recycled Standard), ISO 9001:2015, ISO 14001, BRCGS, Social Accountability International, and amfori membership."
+      },
+      {
+        "q": "Can you report on our program's impact?",
+        "a": "Yes. Every step from pellet to finished bag is tracked, and we provide sustainability performance data for ESG reporting."
+      },
+      {
+        "q": "Can the bags carry our branding?",
+        "a": "Yes. Sizes, printing options and finishes are all customizable to tell your sustainability story."
+      },
+      {
+        "q": "Where are you based?",
+        "a": "U.S. based, serving global clients. Tell us about your program and our team will work with you from design to delivery."
+      }
+    ],
+    "footnote": "Still have questions? Email hello@oceospackaging.com."
+  },
+  "cta": {
+    "eyebrow": "Contact",
+    "heading": "Let's start|a conversation.",
+    "body": "Launching a retail program, building a sustainability initiative or piloting a closed-loop solution? We help brands switch to reusable packaging without compromise on design, scale or performance.",
+    "primary": "Start a conversation",
+    "image": "/images/cta/cta.webp"
+  },
+  "contact": {
+    "heading": "Let's start a conversation",
+    "body": "Our team will work with you through every step of the process, from design to delivery. Tell us about your project and we'll get back to you shortly.",
+    "success": "Thanks. Your email app should have opened with everything filled in. Hit send and the team will take it from there.",
+    "sent": "Thanks. Your message is with the team and we'll be in touch shortly.",
+    "error": "That didn't go through. Please email us directly at",
+    "form": {
+      "endpoint": "",
+      "fields": {}
+    }
+  },
+  "footer": {
+    "tagline": "Let's reduce waste. Let's build better. Together."
+  }
+}

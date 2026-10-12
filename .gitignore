@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.DS_Store
+tsconfig.tsbuildinfo
+
+# Scratch dir for scripts/build-tokens.mjs (app/tokens.generated.css IS committed)
+.tokens-build
+
+# Source/master media (kept locally; too big for git: the .psb is 121MB).
+# The encoded web versions live in public/.
+imported/
+assets-src/

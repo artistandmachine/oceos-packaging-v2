@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "./tokens.generated.css";
+@config "../tailwind.config.js";
+
+/* ============================================================
+   OCEOS v2 design language
+   Look from era-residence.com (condensed uppercase Didone, script
+   accent, tiny expanded labels, cream / mist / forest bands, arches);
+   structure and scroll moments from unitedcarriers.com. Bands flip via
+   data-theme="dark" (forest) or "mist" on a section (scripts/build-tokens.mjs).
+   ============================================================ */
+
+/* Shared so the nav mark can center itself on the t-h4 "Book a call"
+   (components/Header.tsx). */
+:root {
+  --size-h4: clamp(1.25rem, 1.75vw, 1.75rem);
+}
+
+html {
+  background: var(--brand-forest);
+  /* 1rem = 16px. Type sizes below are rem off this base. */
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  /* All sans copy sits at 120% leading (the .t-* text classes match). */
+  line-height: 1.2;
+  /* Montserrat runs medium by default; .t-label stays bold. Serif and
+     script classes set font-normal themselves. */
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Every band paints its own token background. In the base layer so any
+   bg-* utility on the same element still wins. */
+@layer base {
+  [data-theme] {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+  }
+}
+
+@layer components {
+  /* Page gutter, used on every section's inner wrapper. Wider on desktop
+     so content never runs under the fixed nav mark in the left column. */
+  .gutter {
+    @apply px-5 md:px-10 lg:px-[9rem];
+  }
+
+  /* ---- Display type (Oranienbaum, always uppercase) ----
+     Sizes track ERA's steps at 1440px: 173 / 122 / 86 / 57 / 36px. */
+  .t-mega {
+    @apply font-serif font-normal uppercase leading-[0.87] tracking-[-0.024em];
+    font-size: clamp(4rem, 12vw, 15rem);
+  }
+  .t-h1 {
+    @apply font-serif font-normal uppercase leading-[0.88] tracking-[-0.024em];
+    font-size: clamp(3rem, 8.5vw, 10rem);
+  }
+  .t-h2 {
+    @apply font-serif font-normal uppercase leading-[0.91] tracking-[-0.02em];
+    font-size: clamp(2.25rem, 6vw, 7rem);
+  }
+  .t-h3 {
+    @apply font-serif font-normal uppercase leading-[0.95] tracking-[-0.012em];
+    font-size: clamp(1.75rem, 2.5vw, 3rem);
+  }
+  .t-h4 {
+    @apply font-serif font-normal uppercase leading-none;
+    font-size: var(--size-h4);
+  }
+  .t-num {
+    @apply font-serif font-normal leading-[0.85] tracking-[-0.024em] tabular-nums;
+    font-size: clamp(3.5rem, 8vw, 9rem);
+  }
+  /* ERA's flourished accent word, set inside or beside a display line */
+  .t-script {
+    @apply font-script font-normal normal-case leading-none tracking-normal;
+  }
+
+  /* ---- Text type (Montserrat) ---- */
+  .t-lead {
+    @apply text-[0.9375rem] leading-[1.2] tracking-[-0.01em] md:text-[1rem];
+  }
+  .t-body {
+    @apply text-[0.8125rem] leading-[1.2] tracking-[-0.01em];
+  }
+  .t-small {
+    @apply text-[0.71875rem] leading-[1.2];
+  }
+  /* Bold uppercase micro-labels: eyebrows, indexes, nav */
+  .t-label {
+    @apply text-[0.75rem] font-bold uppercase leading-[1.2] tracking-[0.05em] md:text-[0.78125rem];
+  }
+  /* Letter-spaced serif caption ("F R O M  R O O F T O P  T E R R A C E S") */
+  .t-spaced {
+    @apply font-serif font-normal uppercase leading-none tracking-[0.8em];
+    font-size: clamp(1rem, 1.6vw, 1.4rem);
+  }
+
+  /* UC's signature: deliberate wide gaps between headline words.
+     Put <Gap /> (components/Gap.tsx) between words; this sizes it. */
+  .word-gap {
+    @apply inline-block w-[0.9em];
+  }
+}
+
+/* rPET spunbond weave: tiny diamond dots on a diagonal lattice, the
+   texture of a non-woven bag up close. An 8px SVG tile used as a MASK over
+   the band's ink, so it recolors with tokens (faint navy on cream, faint
+   cream on forest). Drawn on ::before behind the content.
+
+   .weave  section texture: add to any band (Process, Clients, Footer use it)
+   .hatch  media placeholder surface (Media.tsx), slightly stronger, and
+           gone once a real image covers it. In the components layer so
+           utilities like `absolute` still win over its position: relative. */
+@layer components {
+  .weave,
+  .hatch {
+    position: relative;
+    isolation: isolate;
+    --weave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2 1.05 2.95 2 2 2.95 1.05 2Z M6 5.05 6.95 6 6 6.95 5.05 6Z'/%3E%3C/svg%3E");
+  }
+  .weave::before,
+  .hatch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    background-color: var(--color-on-surface);
+    opacity: var(--weave-opacity, 0.07);
+    -webkit-mask-image: var(--weave);
+    mask-image: var(--weave);
+    -webkit-mask-size: 8px 8px;
+    mask-size: 8px 8px;
+  }
+  .hatch {
+    --weave-opacity: 0.12;
+  }
+}
+
+/* Hero stand-ins until the drone loop and cloud art land
+   (components/Hero.tsx). The ocean drifts so the zoom can be judged; the
+   clouds are soft white blobs with real transparency. */
+.ocean-placeholder {
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 40%, #2f7f9a66, transparent 70%),
+    radial-gradient(ellipse 35% 25% at 70% 65%, #1f6a8a55, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 20%, #3c93a855, transparent 70%),
+    linear-gradient(160deg, #0c3a52, #0a4d66 45%, #0b5f78);
+  background-size: 160% 160%, 140% 140%, 180% 180%, 100% 100%;
+  animation: ocean-drift 18s ease-in-out infinite alternate;
+}
+/* Logo ticker (components/LogoTicker.tsx): two identical copies of the
+   row; sliding left by half the track (one copy) loops with no seam. */
+.ticker-track {
+  animation: ticker var(--ticker-duration, 40s) linear infinite;
+}
+@keyframes ticker {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+}
+@keyframes ocean-drift {
+  from { background-position: 0% 0%, 100% 100%, 50% 0%, 0 0; }
+  to { background-position: 100% 60%, 0% 40%, 50% 100%, 0 0; }
+}
+.cloud-placeholder {
+  filter: blur(22px);
+  background:
+    radial-gradient(closest-side, #fff, #ffffff00) 8% 12% / 38% 30% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 52% 6% / 44% 26% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 92% 22% / 34% 30% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 28% 44% / 40% 28% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 74% 52% / 42% 32% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 6% 78% / 36% 30% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 46% 88% / 46% 28% no-repeat,
+    radial-gradient(closest-side, #fff, #ffffff00) 90% 90% / 36% 30% no-repeat;
+}
+/* Same blobs, rearranged per deck so gaps don't line up */
+.cloud-placeholder-2 { transform: scaleX(-1) rotate(12deg); }
+.cloud-placeholder-3 { transform: rotate(180deg); filter: blur(16px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ocean-placeholder { animation: none; }
+}
