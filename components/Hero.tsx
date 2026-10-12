@@ -18,16 +18,17 @@ type Video = { webm: string; mp4: string; poster: string };
 type Logo = { name: string; logo: string };
 
 /**
- * The flight (UC's space-to-white opening, flown forward):
+ * The flight (UC's space-to-white opening, climbing straight up):
  *  1. A top-down drone loop of open ocean (hovering; the waves move, the
  *     camera doesn't) fills the screen, with the title over it.
- *  2. Scrolling pins it and slides the footage up the screen, so you're
- *     flying forward over the water, while it zooms back out a little
- *     (rising). The footage is zoomed in (a layer 155% of the screen tall)
- *     to give it that runway. A touch of blur and a thickening haze come
- *     in late.
+ *  2. Scrolling pins it and zooms the footage out from 1.9x to 1x about
+ *     the centre, slow at first then faster, so you lift off the water,
+ *     while the water slides up the screen (flying forward as you climb).
+ *     The water softens and loses colour and a cream haze thickens with
+ *     height.
  *  3. Three transparent cloud decks arrive huge and soft, then shrink
- *     away as you pass through them (nearer decks shrink further), then
+ *     toward the centre as you climb past them (nearer decks shrink
+ *     further), then
  *     a cream veil closes over everything. It ends on the page's exact
  *     cream, so the next section starts with no seam.
  *
@@ -126,15 +127,22 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
   // Everything below is keyed to `p`, the flight's own 0-1.
   const p = useTransform(scrollYProgress, [0, FLIGHT / (FLIGHT + HOLD)], [0, 1]);
 
-  // Fly forward: the water slides up the screen from the first scroll
-  // until the veil has closed. % is of the layer (155% of the screen
-  // tall), so 35.5% ~ 55svh, leaving its bottom edge just below the fold.
-  // At the same time it eases back out (1.15 -> 1), gaining altitude on
-  // the way into the clouds.
-  const forward = useTransform(p, [0, 0.95], ["0%", "-35.5%"]);
-  const zoom = useTransform(p, [0, 0.95], [1.15, 1]);
-  const blur = useTransform(p, [0.4, 0.75], ["blur(0px)", "blur(4px)"]);
-  const haze = useTransform(p, [0.1, 0.6], [0, 0.32]);
+  // Climb straight up: no sliding, the whole view shrinks toward the
+  // centre (1.9 -> 1) as the camera rises, slow off the water then
+  // speeding up (ease-in). The footage only fills the screen, so 1.9x
+  // is about the 1920px source's limit at desktop widths.
+  const zoom = useTransform(p, [0, 0.95], [1.9, 1], { ease: (t) => t ** 1.6 });
+  // ...while the water also slides up the screen (flying forward as you
+  // climb). % is of the footage layer (130% of the screen tall), so 23%
+  // ~ 30svh, leaving its bottom edge at the fold.
+  const forward = useTransform(p, [0, 0.95], ["0%", "-23%"]);
+  // Altitude: the water goes soft and loses colour, and the cream haze
+  // thickens, as you climb.
+  const look = useTransform(p, (v) => {
+    const k = (a: number, b: number) => Math.min(1, Math.max(0, (v - a) / (b - a)));
+    return `blur(${4 * k(0.4, 0.75)}px) saturate(${1 - 0.4 * k(0.15, 0.7)})`;
+  });
+  const haze = useTransform(p, [0.1, 0.6], [0, 0.5]);
 
   // Title never fades and sits above the clouds and veil, so it reads for
   // the whole flight. It drifts up slightly, and turns from cream to navy
@@ -184,11 +192,10 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
       <div data-band={band} className="sticky top-0 h-[100svh] overflow-hidden">
         {/* Outer: screen-sized, zooms out about the screen's centre. It
             never drops below 1, so the inner layer always covers.
-            Inner: 155% of the screen tall, anchored at the top: the
-            zoom-in (object-cover scales the footage to fill it) that gives
-            the forward slide its runway. */}
-        <motion.div className="absolute inset-0" style={{ scale: zoom, filter: blur }}>
-          <motion.div className="absolute inset-x-0 top-0 h-[155%]" style={{ y: forward }}>
+            Inner: 130% of the screen tall, anchored at the top, so the
+            upward slide has runway. */}
+        <motion.div className="absolute inset-0" style={{ scale: zoom, filter: look }}>
+          <motion.div className="absolute inset-x-0 top-0 h-[130%]" style={{ y: forward }}>
             <Ocean video={video} playing={inView && !covered} />
           </motion.div>
         </motion.div>
@@ -196,13 +203,13 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
         <Scrim />
         <Wordmark src={wordmark} opacity={markFade} filter={markBlur} />
 
-        {/* Far to near. Each deck arrives huge and soft, then shrinks away
-            below as you climb past, while sliding up the frame with the
-            scroll. Nearer decks start bigger, shrink further and travel
-            further up (parallax). */}
-        <CloudLayer cloud={clouds[0]} progress={p} range={[0.26, 0.9]} scale={[2.2, 0.85]} drift={["12%", "-18%"]} opacity={0.5} index={0} />
-        <CloudLayer cloud={clouds[1]} progress={p} range={[0.33, 0.93]} scale={[3, 0.95]} drift={["20%", "-28%"]} opacity={0.9} index={1} />
-        <CloudLayer cloud={clouds[2]} progress={p} range={[0.4, 0.96]} scale={[4, 1.05]} drift={["30%", "-40%"]} opacity={1} index={2} />
+        {/* Far to near. Each deck arrives huge and soft around you, then
+            shrinks toward the centre, dropping away below as you climb
+            past it. Nearer decks start bigger and shrink further
+            (parallax). No sliding: straight up. */}
+        <CloudLayer cloud={clouds[0]} progress={p} range={[0.26, 0.9]} scale={[2.2, 0.7]} opacity={0.5} index={0} />
+        <CloudLayer cloud={clouds[1]} progress={p} range={[0.33, 0.93]} scale={[3, 0.8]} opacity={0.9} index={1} />
+        <CloudLayer cloud={clouds[2]} progress={p} range={[0.4, 0.96]} scale={[4, 0.9]} opacity={1} index={2} />
 
         <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-surface" style={{ opacity: veil }} />
 
@@ -371,7 +378,6 @@ function CloudLayer({
   progress,
   range,
   scale,
-  drift,
   opacity,
   index,
 }: {
@@ -379,19 +385,17 @@ function CloudLayer({
   progress: MotionValue<number>;
   range: [number, number];
   scale: [number, number];
-  drift: [string, string];
   opacity: number;
   index: number;
 }) {
   const [ok, setOk] = useState(true);
   const ts = useTransform(progress, range, scale);
-  const ty = useTransform(progress, range, drift);
   // Slow fade in, so each deck thickens rather than appears.
   const to = useTransform(progress, [range[0], range[0] + 0.16], [0, opacity]);
   const blur = useTransform(progress, [range[0], range[0] + (range[1] - range[0]) * 0.6], ["blur(18px)", "blur(0px)"]);
 
   return (
-    <motion.div aria-hidden="true" className="pointer-events-none absolute inset-[-15%]" style={{ scale: ts, y: ty, opacity: to, filter: blur }}>
+    <motion.div aria-hidden="true" className="pointer-events-none absolute inset-[-15%]" style={{ scale: ts, opacity: to, filter: blur }}>
       {cloud && ok ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={cloud.src} alt="" onError={() => setOk(false)} className="absolute inset-0 h-full w-full object-cover" />
