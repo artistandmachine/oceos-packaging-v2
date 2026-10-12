@@ -50,7 +50,7 @@ export default function Home() {
         <Cta {...cta} email={company.email} />
       </main>
       <Footer tagline={footer.tagline} nav={nav} products={products.items.map((p) => p.title)} company={company} />
-      <ContactDrawer {...contact} email={company.email} />
+      <ContactDrawer {...contact} email={company.email} name={company.name} wordmark={company.wordmark} />
     </>
   );
 }

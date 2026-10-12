@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useLoaded, usePreloadAsset } from "@/lib/loaded";
 import { useMinWidth } from "@/lib/useMinWidth";
+import { heroChrome, heroMenuLift } from "@/lib/heroChrome";
 import { RevealText, EASE } from "./Reveal";
 import LogoTicker from "./LogoTicker";
 
@@ -68,6 +69,21 @@ export default function Hero({
   const reduce = useReducedMotion();
   const copy = { eyebrow, titleTop, titleBottom, script, since, sub, logos, logosLabel };
 
+  // Static hero: the header's Book a call goes as the hero scrolls half a
+  // screen away (the flight drives heroChrome itself, in Ascent).
+  useEffect(() => {
+    if (wide && !reduce) return;
+    const update = () => {
+      const top = document.getElementById("hero")?.getBoundingClientRect().top ?? 0;
+      const gone = -top / window.innerHeight; // screens scrolled past the hero top
+      heroChrome.set(Math.min(1, Math.max(0, 1 - gone / 0.5)));
+      heroMenuLift.set(Math.min(1, Math.max(0, (gone - 0.5) / 0.25)));
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [wide, reduce]);
+
   if (!wide || reduce) {
     return (
       <section id="hero" aria-label="Intro" className="relative">
@@ -131,6 +147,15 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
   // the first ones roll over it, gone before the title turns navy.
   const markFade = useTransform(p, [0.26, 0.42], [1, 0]);
   const markBlur = useTransform(p, [0.26, 0.42], ["blur(0px)", "blur(6px)"]);
+  // The header's Book a call leaves with it (lib/heroChrome.ts).
+  // Menu then rises into its place, once it's fully gone.
+  const menuLift = useTransform(p, [0.42, 0.5], [0, 1]);
+  useMotionValueEvent(markFade, "change", (v) => heroChrome.set(v));
+  useMotionValueEvent(menuLift, "change", (v) => heroMenuLift.set(v));
+  useEffect(() => {
+    heroChrome.set(markFade.get());
+    heroMenuLift.set(menuLift.get());
+  }, [markFade, menuLift]);
   // Cream closes over everything at the top of the climb
   const veil = useTransform(p, [0.68, 0.95], [0, 1]);
 

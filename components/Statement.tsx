@@ -39,7 +39,7 @@ export default function Statement({
         <div className="lg:col-span-6">
           <div className="flex flex-col gap-10 lg:sticky lg:top-mark">
             <Eyebrow>{eyebrow}</Eyebrow>
-            <Media src={images[0]} sizes="(min-width: 1024px) 20vw, 60vw" className="aspect-[16/10] w-3/5 lg:w-2/5" />
+            <Media src={images[0]} sizes="(min-width: 1024px) 45vw, 100vw" className="aspect-[3/2] w-full lg:w-[94%]" />
             <h2 className="t-h1">
               {muted && <RevealText as="span" text={muted} className="block text-on-surface-variant/60" stagger={0.05} />}
               <RevealText as="span" text={strong} delay={0.15} className="block" stagger={0.05} />

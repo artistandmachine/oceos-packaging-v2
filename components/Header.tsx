@@ -1,11 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { lockScroll, scrollToHash } from "@/lib/scroll";
 import { openContact } from "@/lib/contact";
 import { useBandTheme } from "@/lib/useBandTheme";
 import { useLoaded } from "@/lib/loaded";
+import { heroChrome, heroMenuLift } from "@/lib/heroChrome";
 import { EASE } from "./Reveal";
 import { Roll } from "./Button";
 import { InstagramIcon, LinkedInIcon, Mark } from "./Icons";
@@ -27,22 +36,60 @@ type Company = {
  * and photos (lib/useBandTheme.ts). "Menu" opens a full-screen forest
  * overlay with big serif links.
  */
-export default function Header({ links, company }: { links: Link[]; company: Company }) {
+export default function Header({
+  links,
+  company,
+}: {
+  links: Link[];
+  company: Company;
+}) {
   const [open, setOpen] = useState(false);
   const loaded = useLoaded();
   const leftRef = useRef<HTMLAnchorElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const leftBand = useBandTheme(leftRef, leftRef);
   const rightBand = useBandTheme(rightRef, rightRef);
-  const theme = (band: string) => (open ? "dark" : band === "light" ? undefined : band);
+  const theme = (band: string) =>
+    open ? "dark" : band === "light" ? undefined : band;
 
   // "To top" joins the corner under Menu once the footer is in view.
   const [atFooter, setAtFooter] = useState(false);
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", () => {
     const footer = document.querySelector("footer");
-    setAtFooter(!!footer && footer.getBoundingClientRect().top < window.innerHeight);
+    setAtFooter(
+      !!footer && footer.getBoundingClientRect().top < window.innerHeight,
+    );
   });
+
+  // Book a call only lives over the hero: it fades with the hero
+  // wordmark (lib/heroChrome.ts) and Menu (+ To top) slides up into its
+  // place, Menu's centre landing on Book a call's (the mark line).
+  const bookRef = useRef<HTMLButtonElement>(null);
+  const restRef = useRef<HTMLDivElement>(null);
+  const [lift, setLift] = useState(0);
+  useEffect(() => {
+    const measure = () => {
+      const book = bookRef.current;
+      const rest = restRef.current;
+      if (!book || !rest) return;
+      const menu = rest.firstElementChild as HTMLElement;
+      // Menu's resting centre (minus whatever lift is applied right now)
+      // to the centre of Book a call's text line.
+      const applied = new DOMMatrix(getComputedStyle(rest).transform).m42;
+      const m = menu.getBoundingClientRect();
+      const b = book.getBoundingClientRect();
+      const textH = parseFloat(getComputedStyle(book).fontSize);
+      setLift(m.top - applied + m.height / 2 - (b.top + textH / 2));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  // Menu holds until Book a call has fully faded, then rises (heroMenuLift).
+  const restY = useTransform(heroMenuLift, (v) => -v * lift);
+  const [bookGone, setBookGone] = useState(false);
+  useMotionValueEvent(heroChrome, "change", (v) => setBookGone(v < 0.5));
 
   // Only lock/unlock when `open` actually changes. Running on mount would
   // unlock the page while the Preloader still holds it.
@@ -101,30 +148,46 @@ export default function Header({ links, company }: { links: Link[]; company: Com
           style={{ backgroundColor: "transparent" }}
           className="pointer-events-auto absolute right-4 top-6 flex flex-col items-end gap-4 text-right text-on-surface transition-colors duration-500 md:right-6 md:top-10 lg:right-[2.25rem]"
         >
-          <button type="button" onClick={openContact} className="group t-h4 relative flex flex-col items-end pb-1">
+          <motion.button
+            ref={bookRef}
+            type="button"
+            onClick={openContact}
+            tabIndex={bookGone ? -1 : undefined}
+            aria-hidden={bookGone}
+            style={{ opacity: heroChrome }}
+            className={`group t-h4 relative flex flex-col items-end pb-1 ${bookGone ? "pointer-events-none" : ""}`}
+          >
             <Roll>Book a call</Roll>
             <span className="absolute inset-x-0 bottom-0 h-px origin-right bg-current transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-x-0" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setOpen((o) => !o)}
-            aria-expanded={open}
-            aria-controls="menu-overlay"
-            className="group t-label flex items-center gap-2"
+          </motion.button>
+          <motion.div
+            ref={restRef}
+            style={{ y: restY }}
+            className="flex flex-col items-end gap-4"
           >
-            <Roll>{open ? "Close" : "Menu"}</Roll>
-          </button>
-          <a
-            href="#top"
-            onClick={(e) => scrollToHash(e, "#top")}
-            tabIndex={atFooter && !open ? undefined : -1}
-            aria-hidden={!atFooter || open}
-            className={`group t-label flex items-center gap-2 transition-opacity duration-500 ${
-              atFooter && !open ? "opacity-100" : "pointer-events-none opacity-0"
-            }`}
-          >
-            <Roll>To top ↑</Roll>
-          </a>
+            <button
+              type="button"
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              aria-controls="menu-overlay"
+              className="group t-label flex items-center gap-2"
+            >
+              <Roll>{open ? "Close" : "Menu"}</Roll>
+            </button>
+            <a
+              href="#top"
+              onClick={(e) => scrollToHash(e, "#top")}
+              tabIndex={atFooter && !open ? undefined : -1}
+              aria-hidden={!atFooter || open}
+              className={`group t-label flex items-center gap-2 transition-opacity duration-500 ${
+                atFooter && !open
+                  ? "opacity-100"
+                  : "pointer-events-none opacity-0"
+              }`}
+            >
+              <Roll>To top ↑</Roll>
+            </a>
+          </motion.div>
         </div>
       </motion.header>
 
@@ -148,11 +211,19 @@ export default function Header({ links, company }: { links: Link[]; company: Com
                     initial={{ y: "100%" }}
                     animate={{ y: "0%" }}
                     exit={{ y: "100%" }}
-                    transition={{ duration: 0.8, ease: EASE, delay: 0.15 + i * 0.05 }}
+                    transition={{
+                      duration: 0.8,
+                      ease: EASE,
+                      delay: 0.15 + i * 0.05,
+                    }}
                     className="group flex items-start gap-3 py-1"
                   >
-                    <span className="t-label pt-[0.6em] tabular-nums text-on-surface-variant">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="t-h2 transition-opacity duration-500 group-hover:opacity-60">{l.label}</span>
+                    <span className="t-label pt-[0.6em] tabular-nums text-on-surface-variant">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="t-h2 transition-opacity duration-500 group-hover:opacity-60">
+                      {l.label}
+                    </span>
                   </motion.a>
                 </div>
               ))}
@@ -167,15 +238,34 @@ export default function Header({ links, company }: { links: Link[]; company: Com
             >
               <div className="flex flex-col gap-2">
                 <span className="t-label text-on-surface-variant">Email</span>
-                <a href={`mailto:${company.email}`} className="t-body hover:opacity-60">{company.email}</a>
+                <a
+                  href={`mailto:${company.email}`}
+                  className="t-body hover:opacity-60"
+                >
+                  {company.email}
+                </a>
               </div>
               <div className="flex flex-col gap-2">
-                <span className="t-label text-on-surface-variant">Location</span>
+                <span className="t-label text-on-surface-variant">
+                  Location
+                </span>
                 <span className="t-body">{company.address.join(", ")}</span>
               </div>
               <div className="flex items-end gap-4 md:justify-end">
-                <a href={company.instagram} aria-label="Instagram" className="hover:opacity-60"><InstagramIcon className="h-6 w-6" /></a>
-                <a href={company.linkedin} aria-label="LinkedIn" className="hover:opacity-60"><LinkedInIcon className="h-6 w-6" /></a>
+                <a
+                  href={company.instagram}
+                  aria-label="Instagram"
+                  className="hover:opacity-60"
+                >
+                  <InstagramIcon className="h-6 w-6" />
+                </a>
+                <a
+                  href={company.linkedin}
+                  aria-label="LinkedIn"
+                  className="hover:opacity-60"
+                >
+                  <LinkedInIcon className="h-6 w-6" />
+                </a>
               </div>
             </motion.div>
           </motion.div>

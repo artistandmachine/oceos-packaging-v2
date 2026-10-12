@@ -25,6 +25,8 @@ export default function ContactDrawer({
   error,
   form,
   email,
+  name,
+  wordmark,
 }: {
   heading: string;
   body: string;
@@ -35,6 +37,10 @@ export default function ContactDrawer({
   error: string;
   form: { endpoint: string; fields: Record<string, string> };
   email: string;
+  /** Company name, the wordmark's accessible label */
+  name: string;
+  /** OCEOS PACKAGING wordmark (company.wordmark) */
+  wordmark: string;
 }) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "mailto" | "error">("idle");
@@ -134,7 +140,21 @@ export default function ContactDrawer({
             className="fixed inset-y-0 right-0 z-[61] flex w-full max-w-xl flex-col overflow-y-auto bg-surface p-6 text-on-surface md:p-10"
           >
             <div className="flex items-center justify-between">
-              <span className="t-label text-on-surface-variant">OCEOS</span>
+              {/* The wordmark, as a mask in the text color */}
+              <span
+                role="img"
+                aria-label={name}
+                className="block h-4 bg-on-surface"
+                style={{
+                  aspectRatio: "324 / 24",
+                  maskImage: `url("${wordmark}")`,
+                  WebkitMaskImage: `url("${wordmark}")`,
+                  maskSize: "contain",
+                  WebkitMaskSize: "contain",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskRepeat: "no-repeat",
+                }}
+              />
               <button type="button" onClick={close} className="group t-label flex h-10 items-center rounded-full border border-border px-5">
                 <Roll>Close</Roll>
               </button>
