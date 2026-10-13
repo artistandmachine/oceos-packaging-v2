@@ -76,6 +76,10 @@
       "mp4": "/videos/hero/ocean-firefly.mp4",
       "poster": "/images/hero/ocean-firefly-poster.webp"
     },
+    "pan": {
+      "src": "/images/hero/oceos-genai.webp",
+      "small": "/images/hero/oceos-genai-sm.webp"
+    },
     "clouds": [
       {
         "src": "/images/hero/cloud-01.webp"

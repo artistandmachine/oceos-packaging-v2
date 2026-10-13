@@ -61,3 +61,6 @@ Preloader → Header (corners + full-screen menu) → Hero (wordmark top centre 
 - Confirm OCEOS may show every listed client (incl. luxury houses) and the three testimonials.
 - Contact form needs a real backend (Formspree / Cloudflare Worker) eventually.
 - Organization JSON-LD is in `app/layout.tsx` (an item from an earlier SEO audit of oceospackaging.com).
+
+## Branch hero-genai (test, 2026-10-12)
+Hero uses a still drone photo (`hero.pan` in site.json, `PanImage` in Hero.tsx) that fills the screen width, opens centred showing 90% of it and the climb zooms out to 100% (`tune.hero.pan.visible`; no upward slide), and drifts toward the cursor, stopping dead at the photo's edges (that's how you reach the top/bottom a wide screen crops); delete `hero.pan` to fall back to the video. Source `imported/Oceos Gen AI.png` (2880 square) (ungraded; a vibrant turquoise grade was tried and reverted: ffmpeg `colorbalance=rs=-0.06:gs=0.04:bs=0.03:rm=-0.12:gm=0.07:bm=0.05,eq=saturation=1.6:contrast=1.04:gamma=1.14`), cwebp q80 (2880) and q78 resized to 1600 (`-sm`). A vertical Gen AI video was tried first and dropped (too soft cropped to landscape).
