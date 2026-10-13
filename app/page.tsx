@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <>
-      <Preloader products={preloader.products} stages={preloader.stages} />
+      <Preloader products={preloader.products} stages={preloader.stages} wordmark={company.wordmark} />
       <Header links={nav} company={company} />
       <main>
         <Hero {...hero} wordmark={company.wordmark} logos={clients.logos} logosLabel={clients.wallLabel} />

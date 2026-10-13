@@ -24,9 +24,7 @@
       "rPET Non-Woven",
       "Non-Woven PP",
       "Ultrasonic rPET",
-      "Stitched Bags",
-      "Custom Print",
-      "Retail Programs"
+      "Stitched Bags"
     ],
     "stages": [
       "Collection",
@@ -34,8 +32,7 @@
       "Fabric",
       "Manufacturing",
       "Distribution",
-      "Reuse",
-      "Return"
+      "Reuse and return"
     ]
   },
   "nav": [

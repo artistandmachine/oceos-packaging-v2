@@ -6,13 +6,12 @@ import { lockScroll } from "@/lib/scroll";
 import { assetProgress, markLoaded, trackAsset } from "@/lib/loaded";
 import { EASE } from "./Reveal";
 import Wordmark from "./Wordmark";
+import { tune } from "@/lib/tune";
 
 /** Never lands sooner than MIN (no flash on fast loads). At MAX it stops
  * waiting and runs to 100 regardless; BAIL lifts it outright in case rAF
- * is throttled (background tab). Seconds. */
-const MIN = 1.4;
-const MAX = 5;
-const BAIL = 6.5;
+ * is throttled (background tab). Seconds, set in lib/tune.ts. */
+const { min: MIN, max: MAX, bail: BAIL, cycleMs } = tune.preloader;
 
 /**
  * UC's intro: dotted field, two cycling lists (their countries + services;
@@ -23,7 +22,7 @@ const BAIL = 6.5;
  * the ink panel lifts away like a curtain and the hero headline rises
  * underneath.
  */
-export default function Preloader({ products, stages }: { products: string[]; stages: string[] }) {
+export default function Preloader({ products, stages, wordmark }: { products: string[]; stages: string[]; wordmark: string }) {
   const reduce = useReducedMotion();
   const [done, setDone] = useState(false);
   const [tick, setTick] = useState(0);
@@ -74,7 +73,7 @@ export default function Preloader({ products, stages }: { products: string[]; st
     raf = requestAnimationFrame(frame);
 
     const bail = setTimeout(finish, BAIL * 1000);
-    const id = setInterval(() => setTick((t) => t + 1), 180);
+    const id = setInterval(() => setTick((t) => t + 1), cycleMs);
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(bail);
@@ -115,9 +114,8 @@ export default function Preloader({ products, stages }: { products: string[]; st
             }}
           />
 
-          <div className="relative flex items-start justify-between">
-            <Wordmark className="text-2xl" />
-            <span className="t-label text-on-surface-variant">One bag at a time</span>
+          <div className="relative">
+            <Wordmark src={wordmark} className="h-4 md:h-5" />
           </div>
 
           <div className="relative flex items-end justify-between gap-6">

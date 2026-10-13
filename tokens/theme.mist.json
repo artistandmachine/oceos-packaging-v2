@@ -1,8 +1,0 @@
-{
-  "color": {
-    "surface": { "$value": "{brand.mist}", "$type": "color", "$description": "pale blue band background" },
-    "surface-variant": { "$value": "{brand.mist-deep}", "$type": "color", "$description": "cards on mist" },
-    "border": { "$value": "#17233b33", "$type": "color", "$description": "hairlines on mist (navy at 20%)" },
-    "skeleton-fill": { "$value": "{brand.mist-deep}", "$type": "color", "$description": "media placeholder fill on mist" }
-  }
-}
