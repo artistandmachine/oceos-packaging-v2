@@ -6,24 +6,25 @@ import "./globals.css";
 
 // ERA's type system, rebuilt from Google Fonts (theirs are licensed
 // Adobe/commercial faces). All three download at build time via
-// next/font, then self-host. Swap here once OCEOS brand type is decided.
+// next/font, then self-host. Swap here once OCEOS brand type is decided;
+// which role uses which face is set in app/theme.css.
 //   Display: Oranienbaum, a condensed Didone (stands in for Ambroise).
 //   Script:  Ballet, the flourished accent word ("Live in", "Cookies").
 //   Text/UI: Montserrat (wide by nature; Maison Neue Extended stand-in).
 const serif = Oranienbaum({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-oranienbaum",
   display: "swap",
 });
 const script = Ballet({
   subsets: ["latin"],
-  variable: "--font-script",
+  variable: "--font-ballet",
   display: "swap",
 });
 const sans = Montserrat({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-montserrat",
   display: "swap",
 });
 

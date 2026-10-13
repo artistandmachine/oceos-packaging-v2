@@ -1,34 +1,15 @@
 @import "tailwindcss";
-@import "./tokens.generated.css";
-@config "../tailwind.config.js";
+@import "./theme.css";
 
 /* ============================================================
-   OCEOS v2 design language
-   Look from era-residence.com (condensed uppercase Didone, script
-   accent, tiny expanded labels, cream / mist / forest bands, arches);
-   structure and scroll moments from unitedcarriers.com. Bands flip via
-   data-theme="dark" (forest) or "mist" on a section (scripts/build-tokens.mjs).
+   Plumbing: scroll, cursors, band backgrounds, textures, hero
+   stand-ins. You shouldn't need to edit this to restyle the site;
+   the knobs live in app/theme.css (look), data/site.json (copy)
+   and lib/tune.ts (motion).
+
+   Look from era-residence.com, structure and scroll moments from
+   unitedcarriers.com.
    ============================================================ */
-
-/* Shared so the nav mark can center itself on the t-h4 "Book a call"
-   (components/Header.tsx). --mark-y is that centre line on md+ (top-10
-   + half the t-h4). */
-:root {
-  --size-h4: clamp(1.25rem, 1.75vw, 1.75rem);
-  --mark-y: calc(2.5rem + var(--size-h4) / 2);
-}
-
-/* Section eyebrows sit on the nav mark's centre line when the section
-   top reaches the top of the screen: --mark-y minus half a t-label line
-   (1.2 x 0.78125rem). lg only; below lg a solid header strip covers
-   that band. Right-hand blocks on this line take lg:mr-24 to clear
-   the header's Book a call. */
-@utility pt-mark {
-  padding-top: calc(var(--mark-y) - 0.47rem);
-}
-@utility top-mark {
-  top: calc(var(--mark-y) - 0.47rem);
-}
 
 html {
   background: var(--brand-forest);
@@ -39,12 +20,9 @@ html {
 body {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
-  font-family: var(--font-sans), system-ui, sans-serif;
-  /* All sans copy sits at 120% leading (the .t-* text classes match). */
-  line-height: 1.2;
-  /* Montserrat runs medium by default; .t-label stays bold. Serif and
-     script classes set font-normal themselves. */
-  font-weight: 500;
+  font-family: var(--font-sans);
+  line-height: var(--leading-text);
+  font-weight: var(--weight-text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -91,71 +69,6 @@ html.lenis body {
   }
 }
 
-@layer components {
-  /* Page gutter, used on every section's inner wrapper. Wider on desktop
-     so content never runs under the fixed nav mark in the left column. */
-  .gutter {
-    @apply px-5 md:px-10 lg:px-[9rem];
-  }
-
-  /* ---- Display type (Oranienbaum, always uppercase) ----
-     Sizes track ERA's steps at 1440px: 173 / 122 / 86 / 57 / 36px. */
-  .t-mega {
-    @apply font-serif font-normal uppercase leading-[0.87] tracking-[-0.024em];
-    font-size: clamp(4rem, 12vw, 15rem);
-  }
-  .t-h1 {
-    @apply font-serif font-normal uppercase leading-[0.88] tracking-[-0.024em];
-    font-size: clamp(3rem, 8.5vw, 10rem);
-  }
-  .t-h2 {
-    @apply font-serif font-normal uppercase leading-[0.91] tracking-[-0.02em];
-    font-size: clamp(2.25rem, 6vw, 7rem);
-  }
-  .t-h3 {
-    @apply font-serif font-normal uppercase leading-[0.95] tracking-[-0.012em];
-    font-size: clamp(1.75rem, 2.5vw, 3rem);
-  }
-  .t-h4 {
-    @apply font-serif font-normal uppercase leading-none;
-    font-size: var(--size-h4);
-  }
-  .t-num {
-    @apply font-serif font-normal leading-[0.85] tracking-[-0.024em] tabular-nums;
-    font-size: clamp(3.5rem, 8vw, 9rem);
-  }
-  /* ERA's flourished accent word, set inside or beside a display line */
-  .t-script {
-    @apply font-script font-normal normal-case leading-none tracking-normal;
-  }
-
-  /* ---- Text type (Montserrat) ---- */
-  .t-lead {
-    @apply text-[0.9375rem] leading-[1.2] tracking-[-0.01em] md:text-[1rem];
-  }
-  .t-body {
-    @apply text-[0.8125rem] leading-[1.2] tracking-[-0.01em];
-  }
-  .t-small {
-    @apply text-[0.71875rem] leading-[1.2];
-  }
-  /* Bold uppercase micro-labels: eyebrows, indexes, nav */
-  .t-label {
-    @apply text-[0.75rem] font-bold uppercase leading-[1.2] tracking-[0.05em] md:text-[0.78125rem];
-  }
-  /* Letter-spaced serif caption ("F R O M  R O O F T O P  T E R R A C E S") */
-  .t-spaced {
-    @apply font-serif font-normal uppercase leading-none tracking-[0.8em];
-    font-size: clamp(1rem, 1.6vw, 1.4rem);
-  }
-
-  /* UC's signature: deliberate wide gaps between headline words.
-     Put <Gap /> (components/Gap.tsx) between words; this sizes it. */
-  .word-gap {
-    @apply inline-block w-[0.9em];
-  }
-}
-
 /* rPET spunbond weave: tiny diamond dots on a diagonal lattice, the
    texture of a non-woven bag up close. An 8px SVG tile used as a MASK over
    the band's ink, so it recolors with tokens (faint navy on cream, faint
@@ -181,14 +94,14 @@ html.lenis body {
     pointer-events: none;
     border-radius: inherit;
     background-color: var(--color-on-surface);
-    opacity: var(--weave-opacity, 0.07);
+    opacity: var(--weave-opacity);
     -webkit-mask-image: var(--weave);
     mask-image: var(--weave);
     -webkit-mask-size: 8px 8px;
     mask-size: 8px 8px;
   }
   .hatch {
-    --weave-opacity: 0.12;
+    --weave-opacity: var(--hatch-opacity);
   }
 }
 

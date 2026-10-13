@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "tokens": "node scripts/build-tokens.mjs",
-    "predev": "npm run tokens",
-    "prebuild": "npm run tokens",
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
@@ -27,7 +24,6 @@
     "autoprefixer": "^10.4.19",
     "gh-pages": "^6.1.1",
     "postcss": "^8.4.39",
-    "style-dictionary": "^5.5.2",
     "typescript": "^5.5.3"
   },
   "allowScripts": {

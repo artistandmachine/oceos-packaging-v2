@@ -7,13 +7,12 @@ import { useMinWidth } from "@/lib/useMinWidth";
 import { heroChrome, heroMenuLift } from "@/lib/heroChrome";
 import { RevealText, EASE } from "./Reveal";
 import LogoTicker from "./LogoTicker";
+import { tune } from "@/lib/tune";
 
 type Cloud = { src: string };
 
-/** Ascent scroll lengths, vh: the flight itself, then a hold on the
- * finished frame before the next section. */
-const FLIGHT = 220;
-const HOLD = 50;
+/** Every number in the flight lives in lib/tune.ts (tune.hero). */
+const T = tune.hero;
 type Video = { webm: string; mp4: string; poster: string };
 type Logo = { name: string; logo: string };
 
@@ -125,37 +124,38 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
   // The flight runs over the first 220vh of scroll; the last 50vh holds
   // the finished frame (navy title on cream) before Reasons comes up.
   // Everything below is keyed to `p`, the flight's own 0-1.
-  const p = useTransform(scrollYProgress, [0, FLIGHT / (FLIGHT + HOLD)], [0, 1]);
+  const p = useTransform(scrollYProgress, [0, T.flight / (T.flight + T.hold)], [0, 1]);
 
   // Climb straight up: no sliding, the whole view shrinks toward the
   // centre (1.9 -> 1) as the camera rises, slow off the water then
   // speeding up (ease-in). The footage only fills the screen, so 1.9x
   // is about the 1920px source's limit at desktop widths.
-  const zoom = useTransform(p, [0, 0.95], [1.9, 1], { ease: (t) => t ** 1.6 });
+  const zoom = useTransform(p, T.zoom.range, [T.zoom.from, 1], { ease: (t) => t ** T.zoom.curve });
   // ...while the water also slides up the screen (flying forward as you
   // climb). % is of the footage layer (130% of the screen tall), so 23%
   // ~ 30svh, leaving its bottom edge at the fold.
-  const forward = useTransform(p, [0, 0.95], ["0%", "-23%"]);
+  const forward = useTransform(p, T.forward.range, ["0%", T.forward.to]);
   // Altitude: the water goes soft and loses colour, and the cream haze
   // thickens, as you climb.
   const look = useTransform(p, (v) => {
     const k = (a: number, b: number) => Math.min(1, Math.max(0, (v - a) / (b - a)));
-    return `blur(${4 * k(0.4, 0.75)}px) saturate(${1 - 0.4 * k(0.15, 0.7)})`;
+    return `blur(${T.blur.px * k(...T.blur.range)}px) saturate(${1 - T.desaturate.amount * k(...T.desaturate.range)})`;
   });
-  const haze = useTransform(p, [0.1, 0.6], [0, 0.5]);
+  const haze = useTransform(p, T.haze.range, [0, T.haze.to]);
 
   // Title never fades and sits above the clouds and veil, so it reads for
   // the whole flight. It drifts up slightly, and turns from cream to navy
   // quickly as the haze and clouds whiten the sky behind it, ending navy
-  // on the cream veil. Hex values are brand.cream / brand.navy (Framer
-  // can't interpolate CSS variables).
-  const titleY = useTransform(p, [0, 0.65], ["0%", "-4%"]);
-  const titleColor = useTransform(p, [0.36, 0.47], ["#F3F3EC", "#17233B"]);
+  // on the cream veil. Mixed in CSS from the theme's brand colours, so
+  // changing them in app/theme.css carries through.
+  const titleY = useTransform(p, T.titleDrift.range, ["0%", T.titleDrift.to]);
+  const navy = useTransform(p, T.titleToNavy, [0, 100]);
+  const titleColor = useTransform(navy, (v) => `color-mix(in srgb, var(--brand-navy) ${v}%, var(--brand-cream))`);
   // The header's Book a call fades as the first clouds roll in
   // (lib/heroChrome.ts); Menu then rises into its place once it's gone.
   // The wordmark stays, turning navy with the title.
-  const markFade = useTransform(p, [0.26, 0.42], [1, 0]);
-  const menuLift = useTransform(p, [0.42, 0.5], [0, 1]);
+  const markFade = useTransform(p, T.bookCallFade, [1, 0]);
+  const menuLift = useTransform(p, T.menuLift, [0, 1]);
   useMotionValueEvent(markFade, "change", (v) => heroChrome.set(v));
   useMotionValueEvent(menuLift, "change", (v) => heroMenuLift.set(v));
   useEffect(() => {
@@ -163,7 +163,7 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
     heroMenuLift.set(menuLift.get());
   }, [markFade, menuLift]);
   // Cream closes over everything at the top of the climb
-  const veil = useTransform(p, [0.68, 0.95], [0, 1]);
+  const veil = useTransform(p, T.veil, [0, 1]);
 
   // Header chrome (mark, Book a call, menu) reads cream over the ocean and
   // flips to navy halfway through the title's color change (its own
@@ -174,8 +174,8 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
   const [covered, setCovered] = useState(false);
   const [inView, setInView] = useState(true);
   useMotionValueEvent(p, "change", (v) => {
-    setBand(v < 0.415 ? "dark" : "light");
-    setCovered(v >= 0.96);
+    setBand(v < T.headerFlip ? "dark" : "light");
+    setCovered(v >= T.veil[1] + 0.01);
   });
   useEffect(() => {
     const el = ref.current;
@@ -186,7 +186,7 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
   }, []);
 
   return (
-    <section ref={ref} id="hero" aria-label="Intro" className="relative" style={{ height: `${100 + FLIGHT + HOLD}vh` }}>
+    <section ref={ref} id="hero" aria-label="Intro" className="relative" style={{ height: `${100 + T.flight + T.hold}vh` }}>
       <div data-band={band} className="sticky top-0 h-[100svh] overflow-hidden">
         {/* Outer: screen-sized, zooms out about the screen's centre. It
             never drops below 1, so the inner layer always covers.
@@ -204,9 +204,9 @@ function Ascent({ copy, video, clouds, wordmark }: { copy: Copy; video: Video; c
             shrinks toward the centre, dropping away below as you climb
             past it. Nearer decks start bigger and shrink further
             (parallax). No sliding: straight up. */}
-        <CloudLayer cloud={clouds[0]} progress={p} range={[0.26, 0.9]} scale={[2.2, 0.7]} opacity={0.5} index={0} />
-        <CloudLayer cloud={clouds[1]} progress={p} range={[0.33, 0.93]} scale={[3, 0.8]} opacity={0.9} index={1} />
-        <CloudLayer cloud={clouds[2]} progress={p} range={[0.4, 0.96]} scale={[4, 0.9]} opacity={1} index={2} />
+        {T.clouds.map((c, i) => (
+          <CloudLayer key={i} cloud={clouds[i]} progress={p} {...c} index={i} />
+        ))}
 
         <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-surface" style={{ opacity: veil }} />
 

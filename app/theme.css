@@ -1,0 +1,223 @@
+/* ============================================================
+   THEME: every visual knob for the site, in one file.
+   Colours, band modes, fonts, type sizes, gutters, textures.
+   Save and the page hot-reloads; there's no build step.
+
+   Copy lives in data/site.json. Motion numbers live in lib/tune.ts.
+   ============================================================ */
+
+/* ---- 1. Palette ---------------------------------------------- */
+:root {
+  --brand-cream: #f3f2ed; /* page ground */
+  --brand-cream-deep: #e6e5da; /* cards, placeholders on cream */
+  --brand-navy: #17233b; /* ink: all text on light grounds */
+  --brand-slate: #5e6679; /* muted text on cream and mist */
+  --brand-mist: #dee8ed; /* pale blue-grey band */
+  --brand-mist-deep: #c9d7e0; /* cards, placeholders on mist */
+  --brand-forest: #173a4c; /* dark band (navy-teal; name kept from the olive days) */
+  --brand-forest-deep: #566330; /* cards, placeholders on forest (still the old olive) */
+  --brand-sage: #dbdecf; /* muted text on forest (4.7:1, AA) */
+}
+
+/* ---- 2. Band modes ------------------------------------------
+   Light is the default. Put data-theme="dark" or "mist" on ANY
+   element and every colour inside it flips. Mist only overrides
+   surfaces, so don't nest it inside a dark band.
+   Use as Tailwind classes: bg-surface, text-on-surface,
+   border-border, bg-accent, text-on-accent, ... */
+@theme static {
+  --color-surface: var(--brand-cream); /* section background */
+  --color-on-surface: var(--brand-navy); /* text and icons */
+  --color-surface-variant: var(--brand-cream-deep); /* cards and panels */
+  --color-on-surface-variant: var(--brand-slate); /* secondary text, labels */
+  --color-border: #17233b26; /* hairlines (navy at 15%) */
+  --color-accent: var(--brand-navy); /* filled controls, the moving marker */
+  --color-on-accent: var(--brand-cream); /* text on accent */
+  --color-skeleton-fill: var(--brand-cream-deep); /* media placeholder fill */
+}
+
+@layer base {
+  [data-theme="dark"] {
+    --color-surface: var(--brand-forest);
+    --color-on-surface: var(--brand-cream);
+    --color-surface-variant: var(--brand-forest-deep);
+    --color-on-surface-variant: var(--brand-sage);
+    --color-border: #f3f3ec2e; /* cream at 18% */
+    --color-accent: var(--brand-cream);
+    --color-on-accent: var(--brand-forest);
+    --color-skeleton-fill: var(--brand-forest-deep);
+  }
+  [data-theme="mist"] {
+    --color-surface: var(--brand-mist);
+    --color-surface-variant: var(--brand-mist-deep);
+    --color-border: #17233b33; /* navy at 20% */
+    --color-skeleton-fill: var(--brand-mist-deep);
+  }
+}
+
+/* ---- 3. Fonts -----------------------------------------------
+   The faces are loaded in app/layout.tsx (next/font). Swap a
+   face there; these just say which role uses which face.
+   Tailwind classes: font-sans, font-serif, font-script. */
+@theme {
+  --font-sans: var(--font-montserrat), system-ui, sans-serif; /* text, labels */
+  --font-serif: var(--font-oranienbaum), Georgia, serif; /* display */
+  --font-script: var(--font-ballet), cursive; /* accent word */
+}
+
+/* ---- 4. Type sizes, layout, texture ------------------------- */
+:root {
+  /* Display (serif, uppercase). clamp(min, fluid, max). */
+  --size-mega: clamp(4rem, 12vw, 15rem);
+  --size-h1: clamp(3rem, 8.5vw, 10rem);
+  --size-h2: clamp(2.25rem, 6vw, 7rem);
+  --size-h3: clamp(1.75rem, 2.5vw, 3rem);
+  --size-h4: clamp(1.25rem, 1.75vw, 1.75rem); /* also "Book a call" */
+  --size-num: clamp(3.5rem, 8vw, 9rem);
+  --size-spaced: clamp(1rem, 1.6vw, 1.4rem);
+
+  /* Text (sans). Second value is md (768px) and up. */
+  --size-lead: 0.9375rem;
+  --size-lead-md: 1rem;
+  --size-body: 0.8125rem;
+  --size-small: 0.71875rem;
+  --size-label: 0.75rem;
+  --size-label-md: 0.78125rem;
+  --leading-text: 1.2; /* all sans copy */
+  --weight-text: 500; /* labels stay bold */
+
+  /* Page gutter: phones / md / lg (lg is wide to clear the nav mark) */
+  --gutter: 1.25rem;
+  --gutter-md: 2.5rem;
+  --gutter-lg: 9rem;
+
+  /* The nav mark's centre line on md+: section eyebrows sit on it. */
+  --mark-y: calc(2.5rem + var(--size-h4) / 2);
+
+  /* rPET weave texture strength (.weave on bands, .hatch on placeholders) */
+  --weave-opacity: 0.07;
+  --hatch-opacity: 0.12;
+}
+
+/* ============================================================
+   Below here: the classes built from the knobs above. Change the
+   knobs, not these, unless you're changing a style's character.
+   ============================================================ */
+
+@layer components {
+  .gutter {
+    padding-inline: var(--gutter);
+    @media (width >= 48rem) {
+      padding-inline: var(--gutter-md);
+    }
+    @media (width >= 64rem) {
+      padding-inline: var(--gutter-lg);
+    }
+  }
+
+  /* Display type (Oranienbaum, always uppercase) */
+  .t-mega,
+  .t-h1,
+  .t-h2,
+  .t-h3,
+  .t-h4,
+  .t-spaced {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+  .t-mega {
+    font-size: var(--size-mega);
+    line-height: 0.87;
+    letter-spacing: -0.024em;
+  }
+  .t-h1 {
+    font-size: var(--size-h1);
+    line-height: 0.88;
+    letter-spacing: -0.024em;
+  }
+  .t-h2 {
+    font-size: var(--size-h2);
+    line-height: 0.91;
+    letter-spacing: -0.02em;
+  }
+  .t-h3 {
+    font-size: var(--size-h3);
+    line-height: 0.95;
+    letter-spacing: -0.012em;
+  }
+  .t-h4 {
+    font-size: var(--size-h4);
+    line-height: 1;
+  }
+  /* Big numerals: serif, not uppercased */
+  .t-num {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--size-num);
+    line-height: 0.85;
+    letter-spacing: -0.024em;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Letter-spaced serif caption ("F R O M  R O O F T O P") */
+  .t-spaced {
+    font-size: var(--size-spaced);
+    line-height: 1;
+    letter-spacing: 0.8em;
+  }
+  /* The flourished accent word, set inside or beside a display line */
+  .t-script {
+    font-family: var(--font-script);
+    font-weight: 400;
+    text-transform: none;
+    line-height: 1;
+    letter-spacing: normal;
+  }
+
+  /* Text type (Montserrat) */
+  .t-lead {
+    font-size: var(--size-lead);
+    line-height: var(--leading-text);
+    letter-spacing: -0.01em;
+    @media (width >= 48rem) {
+      font-size: var(--size-lead-md);
+    }
+  }
+  .t-body {
+    font-size: var(--size-body);
+    line-height: var(--leading-text);
+    letter-spacing: -0.01em;
+  }
+  .t-small {
+    font-size: var(--size-small);
+    line-height: var(--leading-text);
+  }
+  /* Bold uppercase micro-labels: eyebrows, indexes, nav */
+  .t-label {
+    font-size: var(--size-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: var(--leading-text);
+    letter-spacing: 0.05em;
+    @media (width >= 48rem) {
+      font-size: var(--size-label-md);
+    }
+  }
+
+  /* Deliberate wide gaps between headline words (components/Gap.tsx) */
+  .word-gap {
+    display: inline-block;
+    width: 0.9em;
+  }
+}
+
+/* Section eyebrows sit on the nav mark's centre line when the section
+   top reaches the top of the screen: --mark-y minus half a t-label line.
+   Used at lg (below lg a solid header strip covers that band). Right-hand
+   blocks on this line take lg:mr-24 to clear the header's Book a call. */
+@utility pt-mark {
+  padding-top: calc(var(--mark-y) - 0.47rem);
+}
+@utility top-mark {
+  top: calc(var(--mark-y) - 0.47rem);
+}

@@ -16,6 +16,7 @@ import { useBandTheme } from "@/lib/useBandTheme";
 import { useLoaded } from "@/lib/loaded";
 import { heroChrome, heroMenuLift } from "@/lib/heroChrome";
 import { EASE } from "./Reveal";
+import { tune } from "@/lib/tune";
 import { Roll } from "./Button";
 import { InstagramIcon, LinkedInIcon, Mark } from "./Icons";
 
@@ -297,7 +298,7 @@ function NudgeMark() {
     const now = performance.now();
     const idle = now - last.current.t > 250;
     if (dir !== last.current.dir || idle) {
-      rotate.set(dir * 5);
+      rotate.set(dir * tune.header.nudge);
       clearTimeout(release.current);
       release.current = setTimeout(() => rotate.set(0), 110);
     }

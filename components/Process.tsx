@@ -11,6 +11,7 @@ import {
 import { useMinWidth } from "@/lib/useMinWidth";
 import Eyebrow from "./Eyebrow";
 import Tbc from "./Tbc";
+import { tune } from "@/lib/tune";
 import Reveal, { RevealText } from "./Reveal";
 
 type Step = { title: string; description: string };
@@ -30,9 +31,10 @@ const CANVAS = 2 * R;
 const INSET = R - 24;
 // Starts at 9 o'clock and runs clockwise, so the bag sets off over the top.
 const LOOP = `M0 ${R} A${R} ${R} 0 1 1 ${CANVAS} ${R} A${R} ${R} 0 1 1 0 ${R} Z`;
-// Each step's angle, clockwise from 12 o'clock (from Bion's sketch):
-// 01 at 9, 02/03 either side of the top, 04 at 3, 05/06 along the bottom.
-const ANGLES = [270, 331, 29, 90, 158, 213];
+// Each step's angle, clockwise from 12 o'clock (from Bion's sketch, set in
+// lib/tune.ts): 01 at 9, 02/03 either side of the top, 04 at 3, 05/06
+// along the bottom.
+const ANGLES = tune.process.angles;
 
 /**
  * Pinned on an ink band. Scrolling draws the loop and moves the marker
@@ -140,7 +142,7 @@ function Pinned({
     <div
       ref={outerRef}
       className="relative"
-      style={{ height: `${steps.length * 60 + 100}vh` }}
+      style={{ height: `${steps.length * tune.process.vhPerStep + tune.process.extraVh}vh` }}
     >
       {/* Pinned, one screen. The description sits top right and the
           circle starts 96px under it, centred and as tall as what's left

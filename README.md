@@ -1,6 +1,8 @@
 # OCEOS Packaging v2
 
-One-page site. **Structure and scroll moments from unitedcarriers.com, tone from era-residence.com.** Stack: Next.js static export, Tailwind v4, Framer Motion, Lenis, token pipeline (`tokens/*.json` → `app/tokens.generated.css`).
+One-page site. **Structure and scroll moments from unitedcarriers.com, tone from era-residence.com.** Stack: Next.js static export, Tailwind v4, Framer Motion, Lenis, CSS-only theme (`app/theme.css`).
+
+**Where to change things:** copy in `data/site.json`, look in `app/theme.css`, motion in `lib/tune.ts`.
 
 ```
 npm install
@@ -12,7 +14,7 @@ Fonts (Oranienbaum, Ballet, Montserrat) come from `next/font/google`, so the fir
 
 ## Design language
 
-- **Palette (ERA's, with a muted olive):** cream `#F3F3EC` ground, navy `#17233B` ink, mist `#DEE7ED` and muted olive `#57642B` bands. All placeholders in `tokens/primitives.json`.
+- **Palette (ERA's, with a muted olive):** cream `#F3F3EC` ground, navy `#17233B` ink, mist `#DEE7ED` and muted olive `#57642B` bands. All in `app/theme.css`.
 - **Bands:** put `data-theme="dark"` on any element and every token inside flips to the ink palette. That's how sections alternate.
 - **Type:** serif display (`.t-mega / .t-h1 / .t-h2 / .t-h3 / .t-num`), grotesk text (`.t-lead / .t-body / .t-small / .t-label`). Defined in `app/globals.css`.
 - **UC word gaps:** a `|` in any headline string in `data/site.json` becomes a wide gap ("We make|the bag.").

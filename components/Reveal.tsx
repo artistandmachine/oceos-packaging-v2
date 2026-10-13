@@ -2,8 +2,9 @@
 
 import { Fragment } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { tune } from "@/lib/tune";
 
-export const EASE = [0.16, 1, 0.3, 1] as const;
+export const EASE = tune.ease;
 
 /** Fade + rise on first view. Used for blocks (cards, paragraphs). */
 export default function Reveal({
